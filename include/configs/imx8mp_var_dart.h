@@ -72,6 +72,60 @@
 	"emmc_dev=2\0"\
 	"sd_dev=1\0" \
 
+#define FLEXBOT_ENV \
+	"boot_set=0\0" \
+	"set0_spl_part=1\0" \
+	"set1_spl_part=2\0" \
+	"set0_fdt_part=5\0" \
+	"set1_fdt_part=6\0" \
+	"uboot_env0_part=7\0" \
+	"uboot_env1_part=8\0" \
+	"set0_uboot_part=9\0" \
+	"set1_uboot_part=10\0" \
+	"param_part=11\0" \
+	"set0_dtb_part=12\0" \
+	"set0_kernel_part=13\0" \
+	"set1_dtb_part=14\0" \
+	"set1_kernel_part=15\0" \
+	"set0_rootfs_part=16\0" \
+	"set1_rootfs_part=17\0" \
+	"perm_part=18\0" \
+	"user_part=19\0" \
+	"interface=mmc\0" \
+	"dev=0\0" \
+	"kernel=zImage\0" \
+	"fdtfile=imx7d-bg-flexbot2.dtb\0" \
+	"do_setroot=setenv root /dev/mmcblk${dev}p${rootfs_part}\0" \
+	"do_tftp_kernel=dhcp ${loadaddr} ${kernel};tftpboot ${fdtaddr} ${fdtfile}\0" \
+	"do_boot_tftp_kernel=run do_tftp_kernel;run do_part_set${boot_set};run do_setroot;run do_args;run do_boot\0" \
+	"nfsport=3049\0" \
+	"nfsmountport=3048\0" \
+	"nfsvers=3\0" \
+	"do_nfsargs=setenv extra_args nfsroot=${serverip}:${nfspath},nfsvers=${nfsvers},port=${nfsport},mountport=${nfsmountport} rootwait\0" \
+	"do_args_nfs=setenv boot_set network;setenv root=/dev/nfs;run do_nfsargs\0" \
+	"do_boot_nfs=run do_args_nfs;run do_args;run do_tftp_kernel;run do boot\0" \
+	"do_boot_nfs_only=run do_args_nfs; setenv extra_args ${extra_args} init=/sbin/init;run do_tftp_kernel;run do_boot\0" \
+	"do_part_set0=setenv dtb_part ${set0_dtb_part}; setenv kernel_part ${set0_kernel_part}; setenv rootfs_part ${set0_rootfs_part};\0" \
+	"do_part_set1=setenv dtb_part ${set1_dtb_part}; setenv kernel_part ${set1_kernel_part}; setenv rootfs_part ${set1_rootfs_part};\0" \
+	"do_part=part start ${interface} ${dev} ${dtb_part} dtb_start;" \
+		"part size ${interface} ${dev} ${dtb_part} dtb_size;" \
+		"part start ${interface} ${dev} ${kernel_part} kernel_start;" \
+		"part size ${interface} ${dev} ${kernel_part} kernel_size;" \
+		"run do_setroot\0" \
+	"do_read=mmc dev ${dev}; mmc rescan; mmc read ${fdtaddr} ${dtb_start} ${dtb_size}; mmc read ${loadaddr} ${kernel_start} ${kernel_size};\0" \
+	"do_args=setenv bootargs console=${console},${baudrate} " \
+		"root=${root} " \
+		"flexbot.boot_set=${boot_set} " \
+		"${extra_args} " \
+		"${optargs}\0" \
+	"do_boot=bootz ${loadaddr} - ${fdtaddr}\0" \
+	"do_slot_boot=" \
+		"run do_part_set${boot_set};" \
+		"run do_part;" \
+		"run do_read;" \
+		"run do_args;" \
+		"run do_boot\0"
+
 /* Initial environment variables */
 #define CONFIG_EXTRA_ENV_SETTINGS		\
 	CONFIG_MFG_ENV_SETTINGS \
@@ -197,7 +251,8 @@
 					"run netboot; " \
 				"fi; " \
 			"fi; " \
-		"fi;"
+		"fi;" \
+	FLEXBOT_ENV
 
 /* Link Definitions */
 
