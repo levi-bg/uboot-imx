@@ -104,7 +104,7 @@
 		"part start ${interface} ${dev} ${kernel_part} kernel_start;" \
 		"part size ${interface} ${dev} ${kernel_part} kernel_size;" \
 		"run do_setroot\0" \
-	"do_read_fdt=mmc read ${fdt_addr} ${dtb_start} ${dtb_size};"
+	"do_read_fdt=mmc read ${fdt_addr} ${dtb_start} ${dtb_size};\0" \
 	"do_read=mmc dev ${dev}; mmc rescan; mmc read ${img_addr} ${kernel_start} ${kernel_size}; unzip ${img_addr} ${loadaddr};\0" \
 	"do_args=setenv bootargs console=${console},${baudrate} " \
 		"root=${root} " \
