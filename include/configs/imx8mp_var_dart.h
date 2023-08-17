@@ -74,21 +74,13 @@
 
 #define FLEXBOT_ENV \
 	"boot_set=0\0" \
-	"set0_spl_part=1\0" \
-	"set1_spl_part=2\0" \
-	"set0_fdt_part=5\0" \
-	"set1_fdt_part=6\0" \
-	"uboot_env0_part=7\0" \
-	"uboot_env1_part=8\0" \
-	"set0_uboot_part=9\0" \
-	"set1_uboot_part=10\0" \
 	"param_part=11\0" \
-	"set0_dtb_part=12\0" \
-	"set0_kernel_part=13\0" \
-	"set1_dtb_part=14\0" \
-	"set1_kernel_part=15\0" \
-	"set0_rootfs_part=16\0" \
-	"set1_rootfs_part=17\0" \
+	"set0_dtb_part=6\0" \
+	"set0_kernel_part=7\0" \
+	"set1_dtb_part=8\0" \
+	"set1_kernel_part=9\0" \
+	"set0_rootfs_part=10\0" \
+	"set1_rootfs_part=11\0" \
 	"perm_part=18\0" \
 	"user_part=19\0" \
 	"interface=mmc\0" \
