@@ -75,20 +75,20 @@
 #define FLEXBOT_ENV \
 	"boot_set=0\0" \
 	"param_part=11\0" \
-	"set0_dtb_part=6\0" \
-	"set0_kernel_part=7\0" \
-	"set1_dtb_part=8\0" \
-	"set1_kernel_part=9\0" \
-	"set0_rootfs_part=10\0" \
-	"set1_rootfs_part=11\0" \
+	"set0_dtb_part=5\0" \
+	"set0_kernel_part=6\0" \
+	"set0_rootfs_part=9\0" \
+	"set1_dtb_part=7\0" \
+	"set1_kernel_part=8\0" \	
+	"set1_rootfs_part=10\0" \
 	"perm_part=18\0" \
 	"user_part=19\0" \
 	"interface=mmc\0" \
-	"dev=0\0" \
+	"dev=1\0" \
 	"kernel=zImage\0" \
 	"fdtfile=imx7d-bg-flexbot2.dtb\0" \
 	"do_setroot=setenv root /dev/mmcblk${dev}p${rootfs_part}\0" \
-	"do_tftp_kernel=dhcp ${loadaddr} ${kernel};tftpboot ${fdtaddr} ${fdtfile}\0" \
+	"do_tftp_kernel=dhcp ${loadaddr} ${kernel};tftpboot ${fdt_addr} ${fdtfile}\0" \
 	"do_boot_tftp_kernel=run do_tftp_kernel;run do_part_set${boot_set};run do_setroot;run do_args;run do_boot\0" \
 	"nfsport=3049\0" \
 	"nfsmountport=3048\0" \
@@ -104,7 +104,8 @@
 		"part start ${interface} ${dev} ${kernel_part} kernel_start;" \
 		"part size ${interface} ${dev} ${kernel_part} kernel_size;" \
 		"run do_setroot\0" \
-	"do_read=mmc dev ${dev}; mmc rescan; mmc read ${fdtaddr} ${dtb_start} ${dtb_size}; mmc read ${img_addr} ${kernel_start} ${kernel_size}; unzip ${img_addr} ${loadaddr};\0" \
+	"do_read_fdt=mmc read ${fdt_addr} ${dtb_start} ${dtb_size};"
+	"do_read=mmc dev ${dev}; mmc rescan; mmc read ${img_addr} ${kernel_start} ${kernel_size}; unzip ${img_addr} ${loadaddr};\0" \
 	"do_args=setenv bootargs console=${console},${baudrate} " \
 		"root=${root} " \
 		"rootwait rw ${cma_size} " \
@@ -112,7 +113,7 @@
 		"flexbot.boot_set=${boot_set} " \
 		"${extra_args} " \
 		"${optargs}\0" \
-	"do_boot=booti ${loadaddr} - ${fdtaddr}\0" \
+	"do_boot=if run do_read_fdt; then booti ${loadaddr} - ${fdt_addr_r}; else echo WARN: Cannot load the DT; fi; \0" \
 	"do_slot_boot=" \
 		"run do_part_set${boot_set};" \
 		"run do_part;" \
