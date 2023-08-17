@@ -112,13 +112,15 @@
 		"part start ${interface} ${dev} ${kernel_part} kernel_start;" \
 		"part size ${interface} ${dev} ${kernel_part} kernel_size;" \
 		"run do_setroot\0" \
-	"do_read=mmc dev ${dev}; mmc rescan; mmc read ${fdtaddr} ${dtb_start} ${dtb_size}; mmc read ${loadaddr} ${kernel_start} ${kernel_size};\0" \
+	"do_read=mmc dev ${dev}; mmc rescan; mmc read ${fdtaddr} ${dtb_start} ${dtb_size}; mmc read ${img_addr} ${kernel_start} ${kernel_size}; unzip ${img_addr} ${loadaddr};\0" \
 	"do_args=setenv bootargs console=${console},${baudrate} " \
 		"root=${root} " \
+		"rootwait rw ${cma_size} " \
+		"cma_name=linux,cma " \
 		"flexbot.boot_set=${boot_set} " \
 		"${extra_args} " \
 		"${optargs}\0" \
-	"do_boot=bootz ${loadaddr} - ${fdtaddr}\0" \
+	"do_boot=booti ${loadaddr} - ${fdtaddr}\0" \
 	"do_slot_boot=" \
 		"run do_part_set${boot_set};" \
 		"run do_part;" \
