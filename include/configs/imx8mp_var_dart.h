@@ -72,9 +72,6 @@
 	"emmc_dev=2\0"\
 	"sd_dev=1\0" \
 
-#undef CONFIG_BOOTCOMMAND
-#define CONFIG_BOOTCOMMAND "run do_slot_boot"
-
 #define FLEXBOT_ENV \
 	"boot_set=0\0" \
 	"param_part=11\0" \
@@ -123,6 +120,7 @@
 		"run do_read;" \
 		"run do_args;" \
 		"run do_boot\0"
+	"bsp_bootcmd=run do_slot_boot\0"	
 
 /* Initial environment variables */
 #define CONFIG_EXTRA_ENV_SETTINGS		\
@@ -233,23 +231,6 @@
 				"echo WARN: Cannot load the DT; " \
 			"fi; " \
 		"fi;\0" \
-	"bsp_bootcmd=echo Running BSP bootcmd ...; " \
-		"run ramsize_check; " \
-		"mmc dev ${mmcdev}; " \
-		"if mmc rescan; then " \
-			"if test ${use_m7} = yes && run loadm7bin; then " \
-				"run runm7bin; " \
-			"fi; " \
-			"if run loadbootscript; then " \
-				"run bootscript; " \
-			"else " \
-				"if run loadimage; then " \
-					"run mmcboot; " \
-				"else " \
-					"run netboot; " \
-				"fi; " \
-			"fi; " \
-		"fi;" \
 	FLEXBOT_ENV
 
 /* Link Definitions */
