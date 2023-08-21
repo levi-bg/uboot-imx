@@ -72,6 +72,9 @@
 	"emmc_dev=2\0"\
 	"sd_dev=1\0" \
 
+#undef CONFIG_BOOTCOMMAND
+#define CONFIG_BOOTCOMMAND "run do_slot_boot"
+
 #define FLEXBOT_ENV \
 	"boot_set=0\0" \
 	"param_part=11\0" \
