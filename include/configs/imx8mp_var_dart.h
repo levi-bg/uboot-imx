@@ -119,7 +119,7 @@
 		"run do_part;" \
 		"run do_read;" \
 		"run do_args;" \
-		"run do_boot\0"
+		"run do_boot\0" \
 	"bsp_bootcmd=run do_slot_boot\0"	
 
 /* Initial environment variables */
